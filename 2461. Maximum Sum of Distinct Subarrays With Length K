@@ -1,0 +1,89 @@
+Link: https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k
+
+Brute Force: 
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var maximumSubarraySum = function(nums, k) {
+    let maxx = 0
+    const n = nums.length;
+
+    for(let i=0; i<=n-k; i++) {
+        let sum=0
+        let sett = new Set();
+        let isDup = false;
+        for(let j=i; j<=i+k-1; j++) {
+            if(!sett.has(nums[j])) {
+                sum+=nums[j]
+                sett.add(nums[j])
+
+            } else {
+                isDup = true
+            }
+        }
+        if(!isDup) {
+            maxx = Math.max(maxx,sum)
+        }
+     
+    }
+    return maxx
+
+};
+
+
+Optimized: 
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var maximumSubarraySum = function(nums, k) {
+    let maxx = 0, sum = 0
+    const counts = new Map();
+    const n = nums.length;
+    let dup = 0;
+
+    
+    for(let i =0; i<k; i++) {
+         let num = nums[i]
+        // Safely get the current count or default to 0, then add 1
+        counts.set(num, (counts.get(num) || 0) + 1);
+        sum += num;
+         if(counts.get(num) > 1) {
+            dup += 1
+         }
+    }
+    if(dup === 0) {
+        maxx = Math.max(maxx,sum)
+    }  
+
+    for(let i=k; i<nums.length;i++) {
+       let numToAdd = nums[i];
+        let numToRemove = nums[i - k];
+        
+        // --- ADD the new number ---
+        counts.set(numToAdd, (counts.get(numToAdd) || 0) + 1);
+        sum += numToAdd;
+        
+        if(counts.get(numToAdd) > 1) {
+            dup += 1;
+        }
+
+        // --- REMOVE the old number ---
+        if(counts.get(numToRemove) > 1) {
+            dup -= 1; // It's losing a duplicate status
+        }
+        
+        counts.set(numToRemove, counts.get(numToRemove) - 1);
+        sum -= numToRemove;
+        
+        // --- CHECK MAX ---
+        if(dup === 0) {
+            maxx = Math.max(maxx, sum);
+        }
+    }
+    return maxx 
+    
+};
