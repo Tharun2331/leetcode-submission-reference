@@ -1,0 +1,58 @@
+Link: https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1
+
+Brute Force: 
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @return {number}
+ */
+
+class Solution {
+    maxSubarraySum(arr, k) {
+        // code here
+        let max = 0;
+    
+        for(let i=0; i<=arr.length-k;i++) {
+         let sum = 0;
+       
+            for(let j=i; j<=i+k-1;j++) {
+                sum += arr[j]
+
+            }
+            max = Math.max(max,sum)
+        }
+        return max
+        
+        
+    }
+}
+
+
+Optimal:
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @return {number}
+ */
+
+class Solution {
+    maxSubarraySum(arr, k) {
+        // code here
+    let sum =0
+    let max=0
+    
+    for(let i=0; i<k;i++) {
+        sum+=arr[i]
+    }
+    
+    max = Math.max(max,sum)
+    
+    for(let i=k; i<arr.length; i++) {
+        sum += arr[i] - arr[i-k]
+        max = Math.max(max,sum)
+    }
+    return max
+        
+        
+    }
+}
