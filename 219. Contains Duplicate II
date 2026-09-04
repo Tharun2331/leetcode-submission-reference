@@ -1,0 +1,49 @@
+Link: https://leetcode.com/problems/contains-duplicate-ii
+
+Brute Force:
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function(nums, k) {
+    const n = nums.length;
+    for(let i=0; i<n;i++) {
+        for(let j=i+1; j<=i+k && j < n;j++) {
+            if(nums[i] === nums[j] && (j - i) <= k) {
+                return true
+            } 
+        }
+    }
+    return false
+};
+
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function(nums, k) {
+    const n = nums.length;
+    const sett = new Set();
+
+    for(let i=0; i<Math.min(k,n); i++) {
+        if(sett.has(nums[i])){
+            return true
+        }
+        sett.add(nums[i])
+    }
+
+    for(let j=k; j<n; j++) {
+        if(sett.has(nums[j])) {
+            return true
+        } 
+        sett.add(nums[j])
+        sett.delete(nums[j-k])
+    }
+    
+    return false
+
+};
