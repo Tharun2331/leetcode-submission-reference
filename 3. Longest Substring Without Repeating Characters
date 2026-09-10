@@ -1,0 +1,75 @@
+Link: https://leetcode.com/problems/longest-substring-without-repeating-characters
+
+Brute Force:
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    const n = s.length;
+    let longest = 0;
+    
+    for(let i=0; i<n; i++) {
+        const sett = new Set()
+        let len = 0;
+        for(let j =i; j<n; j++) {
+            if(sett.has(s[j])) {
+                break
+            }
+            sett.add(s[j])
+            len++
+        }
+        longest = Math.max(len, longest)
+    }
+
+    return longest
+};
+
+Optimal 1:
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    const n = s.length;
+    let longest = 0;
+    let l =0, r=0;
+    let mapp = new Map();
+
+    while(r<n) {
+        mapp.set(s[r], (mapp.get(s[r]) || 0) + 1)
+        while(mapp.get(s[r]) > 1) {
+            mapp.set(s[l], mapp.get(s[l])-1)
+            l++
+        }
+        longest = Math.max(longest,r-l+1)
+
+       
+        r++
+    }
+
+    return longest
+};
+
+
+optimal 2:
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    const n = s.length;
+    let longest = 0;
+    const sett =new Set()
+    let l =0, r=0;
+    while(r < n) {
+        while(sett.has(s[r])) {
+            sett.delete(s[l])
+            l++
+        }
+        sett.add(s[r])
+        longest = Math.max(longest, r-l+1)
+        r++
+    }
+    return longest
+};
