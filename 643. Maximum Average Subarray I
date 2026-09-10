@@ -1,0 +1,27 @@
+Link: https://leetcode.com/problems/maximum-average-subarray-i
+
+Optimal:
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findMaxAverage = function(nums, k) {
+    const n = nums.length;
+    let sum = 0;
+    let max_avg = -Infinity;
+    if(n === 1) {
+        return nums[0]
+    }
+
+    for(let i=0; i<Math.min(k,n); i++) {
+        sum+=nums[i]
+    }
+    max_avg = Math.max(max_avg, sum/k)
+
+    for(let j=k; j<n;j++) {
+        sum+=nums[j]-nums[j-k]
+        max_avg = Math.max(max_avg, sum/k)
+    }
+    return max_avg
+};
